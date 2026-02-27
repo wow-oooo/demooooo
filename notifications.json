@@ -1,0 +1,17 @@
+[
+  {
+    "phone": "946859556",
+    "message": "Your booking is confirmed for 2026-02-25 16:00.",
+    "timestamp": "2026-02-25T09:57:20.985Z"
+  },
+  {
+    "phone": "946859556",
+    "message": "You have been removed from the queue.",
+    "timestamp": "2026-02-25T09:57:43.819Z"
+  },
+  {
+    "phone": "946859556",
+    "message": "A spot opened in the queue; please check the website for updated status.",
+    "timestamp": "2026-02-25T09:57:43.819Z"
+  }
+]

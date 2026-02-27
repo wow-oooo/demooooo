@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Beardo barber shop located in Degana, Nagaur district. Premium men's grooming services with online booking and contact at 9261024220.">
+    <title>Beardo - Premium Men's Grooming (Degana, Nagaur)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-scissors"></i>
+                <span>beardo</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#barbers">Barbers</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#registrationQueue">Queue</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="btn-login" onclick="showLoginModal()">Login</button>
+                <button class="btn-book" onclick="showBookingModal()">
+                    <i class="fas fa-calendar"></i>
+                    Book Now
+                </button>
+                <a href="https://wa.me/919261024220?text=Hello%20Beardo" target="_blank" class="whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Beardo</h1>
+            <p>Premium men's grooming in Degana, Nagaur</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="showBookingModal()">
+                    <i class="fas fa-calendar-check"></i> Book Appointment
+                </button>
+                <button class="btn-secondary" onclick="window.open('https://wa.me/919261024220?text=Hi%20Beardo','_blank')">
+                    <i class="fab fa-whatsapp"></i> Quick Book on WhatsApp
+                </button>
+            </div>
+        </div>
+        <div class="hero-overlay"></div>
+    </section>
+
+    <!-- Today's Offers Banner -->
+    <section class="offers-banner">
+        <div class="offer-card">
+            <div class="offer-icon">🎁</div>
+            <h3>Today's Offer</h3>
+            <p>50% Off on Hair Spa</p>
+            <small>Limited time only</small>
+        </div>
+        <div class="offer-card">
+            <div class="offer-icon">⭐</div>
+            <h3>Google Rating</h3>
+            <p>4.8 / 5.0</p>
+            <small>Based on 250+ reviews</small>
+        </div>
+        <div class="offer-card">
+            <div class="offer-icon">🏆</div>
+            <h3>Best Barbers</h3>
+            <p>10+ Certified Professionals</p>
+            <small>5+ years experience each</small>
+        </div>
+        <div class="offer-card">
+            <div class="offer-icon">⏱️</div>
+            <h3>Quick Booking</h3>
+            <p>30-45 Min Slots Available</p>
+            <small>Book in 2 clicks</small>
+        </div>
+        <div class="offer-card" id="offer-queue-card">
+            <div class="offer-icon">👥</div>
+            <h3>Current Queue</h3>
+            <p><span id="offer-queue-count">0</span> waiting</p>
+            <small>Updated live</small>
+        </div>
+    </section>
+
+    <!-- Notification check for customers -->
+    <section id="notifications" class="notifications">
+        <h2>Check Messages</h2>
+        <div class="notif-form">
+            <input type="text" id="notifPhone" placeholder="Your phone number" />
+            <button class="btn-secondary" onclick="checkNotifications()">Check</button>
+        </div>
+        <div id="notifResults"></div>
+    </section>
+
+
+    <!-- Trending Hairstyles Section -->
+    <section class="trending-styles">
+        <h2>Trending Hairstyles This Season</h2>
+        <div class="styles-grid">
+            <div class="style-card">
+                <div class="style-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYcGe8N696k_0QhY4_SbMbfhk19c9kNQXPPRc&usqp=CAU')"></div>
+                <h3>Classic Fade</h3>
+                <p>Timeless and sharp</p>
+                <button class="btn-small" onclick="showBookingModal()">Book Now</button>
+            </div>
+            <div class="style-card">
+                <div class="style-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeBdfzZlTZ-5tW7pK2WEPfU72d7WjBqr2Qa7Lk&usqp=CAU')"></div>
+                <h3>Undercut</h3>
+                <p>Modern & bold</p>
+                <button class="btn-small" onclick="showBookingModal()">Book Now</button>
+            </div>
+            <div class="style-card">
+                <div class="style-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4u2G1ML9kOyBsBvIy9014r6UE4v9Trxz4WbE&usqp=CAU')"></div>
+                <h3>Textured Top</h3>
+                <p>Stylish & versatile</p>
+                <button class="btn-small" onclick="showBookingModal()">Book Now</button>
+            </div>
+            <div class="style-card">
+                <div class="style-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf2wLSX3NE6N9ybkEJCj7iV4IXfLlPbiJFt3k&usqp=CAU')"></div>
+                <h3>Pompadour</h3>
+                <p>Classic elegance</p>
+                <button class="btn-small" onclick="showBookingModal()">Book Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <h2>Our Premium Services</h2>
+        
+        <div class="service-tabs">
+            <button class="tab-btn active" onclick="switchTab('hair')">
+                <i class="fas fa-cut"></i> Hair Services
+            </button>
+            <button class="tab-btn" onclick="switchTab('beard')">
+                <i class="fas fa-beard"></i> Beard Services
+            </button>
+            <button class="tab-btn" onclick="switchTab('grooming')">
+                <i class="fas fa-spa"></i> Grooming
+            </button>
+            <button class="tab-btn" onclick="switchTab('packages')">
+                <i class="fas fa-box"></i> Packages
+            </button>
+        </div>
+
+        <!-- Hair Services Tab -->
+        <div id="hair" class="tab-content active">
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">✂️</div>
+                    <h3>Classic Haircut</h3>
+                    <p>Traditional & professional haircut with styling</p>
+                    <div class="service-details">
+                        <span class="price">₹500</span>
+                        <span class="duration">30 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Classic Haircut', 500)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🔄</div>
+                    <h3>Fade Cut</h3>
+                    <p>Clean fade with precision and detail</p>
+                    <div class="service-details">
+                        <span class="price">₹600</span>
+                        <span class="duration">35 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Fade Cut', 600)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎯</div>
+                    <h3>Undercut</h3>
+                    <p>Modern undercut with sharp lines</p>
+                    <div class="service-details">
+                        <span class="price">₹650</span>
+                        <span class="duration">40 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Undercut', 650)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💇</div>
+                    <h3>Hair Styling</h3>
+                    <p>Professional styling with products</p>
+                    <div class="service-details">
+                        <span class="price">₹300</span>
+                        <span class="duration">20 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Hair Styling', 300)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎨</div>
+                    <h3>Hair Coloring</h3>
+                    <p>Premium hair coloring with expert application</p>
+                    <div class="service-details">
+                        <span class="price">₹1200</span>
+                        <span class="duration">60 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Hair Coloring', 1200)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💆</div>
+                    <h3>Hair Spa</h3>
+                    <p>Deep conditioning and hair treatment</p>
+                    <div class="service-details">
+                        <span class="price">₹800</span>
+                        <span class="duration">45 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Hair Spa', 800)">Book</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beard Services Tab -->
+        <div id="beard" class="tab-content">
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">✂️</div>
+                    <h3>Beard Trim</h3>
+                    <p>Professional beard trimming & shaping</p>
+                    <div class="service-details">
+                        <span class="price">₹400</span>
+                        <span class="duration">25 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Beard Trim', 400)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎯</div>
+                    <h3>Beard Styling</h3>
+                    <p>Expert styling with premium products</p>
+                    <div class="service-details">
+                        <span class="price">₹500</span>
+                        <span class="duration">30 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Beard Styling', 500)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🧴</div>
+                    <h3>Royal Shave</h3>
+                    <p>Traditional straight razor shave experience</p>
+                    <div class="service-details">
+                        <span class="price">₹600</span>
+                        <span class="duration">35 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Royal Shave', 600)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🧼</div>
+                    <h3>Standard Shaving</h3>
+                    <p>Clean shave with proper skin care</p>
+                    <div class="service-details">
+                        <span class="price">₹300</span>
+                        <span class="duration">20 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Standard Shaving', 300)">Book</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grooming Tab -->
+        <div id="grooming" class="tab-content">
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">💆</div>
+                    <h3>Facial for Men</h3>
+                    <p>Complete facial treatment designed for men</p>
+                    <div class="service-details">
+                        <span class="price">₹900</span>
+                        <span class="duration">50 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Facial for Men', 900)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">☀️</div>
+                    <h3>Detan</h3>
+                    <p>Skin brightening & detan treatment</p>
+                    <div class="service-details">
+                        <span class="price">₹600</span>
+                        <span class="duration">40 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Detan', 600)">Book</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🧠</div>
+                    <h3>Head Massage</h3>
+                    <p>Relaxing and therapeutic head massage</p>
+                    <div class="service-details">
+                        <span class="price">₹400</span>
+                        <span class="duration">30 min</span>
+                    </div>
+                    <button class="btn-service" onclick="addToBooking('Head Massage', 400)">Book</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Packages Tab -->
+        <div id="packages" class="tab-content">
+            <div class="packages-grid">
+                <div class="package-card">
+                    <div class="package-badge">Popular</div>
+                    <h3>Monthly Grooming Pass</h3>
+                    <div class="package-price">₹2500</div>
+                    <ul class="package-features">
+                        <li>✓ 2 Haircuts</li>
+                        <li>✓ 2 Beard Trims</li>
+                        <li>✓ 1 Hair Spa</li>
+                        <li>✓ Priority Booking</li>
+                        <li>✓ 10% on Add-ons</li>
+                    </ul>
+                    <button class="btn-package">Buy Now</button>
+                </div>
+                <div class="package-card featured">
+                    <div class="package-badge">Best Value</div>
+                    <h3>VIP Membership</h3>
+                    <div class="package-price">₹5999<span>/month</span></div>
+                    <ul class="package-features">
+                        <li>✓ Unlimited Haircuts</li>
+                        <li>✓ Unlimited Beard Services</li>
+                        <li>✓ 2 Premium Spa</li>
+                        <li>✓ Priority Booking</li>
+                        <li>✓ Free Products</li>
+                        <li>✓ Birthday Discount</li>
+                    </ul>
+                    <button class="btn-package featured">Buy Now</button>
+                </div>
+                <div class="package-card">
+                    <div class="package-badge">Value</div>
+                    <h3>5th Haircut Free</h3>
+                    <div class="package-price">Free</div>
+                    <ul class="package-features">
+                        <li>✓ Book 5 Haircuts</li>
+                        <li>✓ Get 6th Free</li>
+                        <li>✓ 6 Month Validity</li>
+                        <li>✓ Share with Friends</li>
+                        <li>✓ No Blackout Days</li>
+                    </ul>
+                    <button class="btn-package">Join Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Barbers Section -->
+    <section id="barbers" class="barbers">
+        <h2>Meet Our Expert Barbers</h2>
+        <div class="barbers-grid">
+            <div class="barber-card">
+                <div class="barber-image" style="background-image: url('https://images.unsplash.com/photo-1570295994519-bbf1b9f1914d?w=300&h=300&fit=crop')"></div>
+                <h3>Raj Kumar</h3>
+                <div class="barber-specialty">Expert in Fades & Undercuts</div>
+                <div class="barber-experience">
+                    <i class="fas fa-medal"></i> 7+ Years Experience
+                </div>
+                <div class="barber-rating">
+                    <div class="stars">★★★★★</div>
+                    <span>4.9 (45 reviews)</span>
+                </div>
+                <button class="btn-barber" onclick="bookWithBarber('Raj Kumar')">Book with Raj</button>
+            </div>
+
+            <div class="barber-card">
+                <div class="barber-image" style="background-image: url('https://images.unsplash.com/photo-1631267614828-25b8c17f5d51?w=300&h=300&fit=crop')"></div>
+                <h3>Arjun Singh</h3>
+                <div class="barber-specialty">Beard Specialist & Styling</div>
+                <div class="barber-experience">
+                    <i class="fas fa-medal"></i> 8+ Years Experience
+                </div>
+                <div class="barber-rating">
+                    <div class="stars">★★★★★</div>
+                    <span>4.95 (52 reviews)</span>
+                </div>
+                <button class="btn-barber" onclick="bookWithBarber('Arjun Singh')">Book with Arjun</button>
+            </div>
+
+            <div class="barber-card">
+                <div class="barber-image" style="background-image: url('https://images.unsplash.com/photo-1599912676183-bc5755eae12d?w=300&h=300&fit=crop')"></div>
+                <h3>Vikram Patel</h3>
+                <div class="barber-specialty">Hair Coloring Expert</div>
+                <div class="barber-experience">
+                    <i class="fas fa-medal"></i> 5+ Years Experience
+                </div>
+                <div class="barber-rating">
+                    <div class="stars">★★★★☆</div>
+                    <span>4.8 (38 reviews)</span>
+                </div>
+                <button class="btn-barber" onclick="bookWithBarber('Vikram Patel')">Book with Vikram</button>
+            </div>
+
+            <div class="barber-card">
+                <div class="barber-image" style="background-image: url('https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300&h=300&fit=crop')"></div>
+                <h3>Kunal Sharma</h3>
+                <div class="barber-specialty">Classic & Modern Cuts</div>
+                <div class="barber-experience">
+                    <i class="fas fa-medal"></i> 6+ Years Experience
+                </div>
+                <div class="barber-rating">
+                    <div class="stars">★★★★★</div>
+                    <span>4.85 (41 reviews)</span>
+                </div>
+                <button class="btn-barber" onclick="bookWithBarber('Kunal Sharma')">Book with Kunal</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <h2>Style Gallery & Portfolio</h2>
+        <div class="gallery-filters">
+            <button class="filter-btn active" onclick="filterGallery('all')">All</button>
+            <button class="filter-btn" onclick="filterGallery('haircut')">Haircuts</button>
+            <button class="filter-btn" onclick="filterGallery('beard')">Beard Styles</button>
+            <button class="filter-btn" onclick="filterGallery('beforeafter')">Before/After</button>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item haircut">
+                <img src="https://images.unsplash.com/photo-1599912676183-bc5755eae12d?w=400&h=400&fit=crop" alt="Classic Fade">
+                <div class="gallery-overlay">
+                    <h4>Classic Fade</h4>
+                    <p>Sharp & Clean</p>
+                </div>
+            </div>
+            <div class="gallery-item beard">
+                <img src="https://images.unsplash.com/photo-1621905167918-48416bd8575a?w=400&h=400&fit=crop" alt="Beard Style">
+                <div class="gallery-overlay">
+                    <h4>Beard Styling</h4>
+                    <p>Professional Look</p>
+                </div>
+            </div>
+            <div class="gallery-item haircut">
+                <img src="https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=400&h=400&fit=crop" alt="Textured Top">
+                <div class="gallery-overlay">
+                    <h4>Textured Top</h4>
+                    <p>Modern & Bold</p>
+                </div>
+            </div>
+            <div class="gallery-item beforeafter">
+                <img src="https://images.unsplash.com/photo-1503598092244-fa898faca8f3?w=400&h=400&fit=crop" alt="Transformation">
+                <div class="gallery-overlay">
+                    <h4>Complete Transformation</h4>
+                    <p>Before & After</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="reviews">
+        <h2>Customer Reviews & Testimonials</h2>
+        <div class="review-stats">
+            <div class="stat">
+                <div class="stat-number">4.8</div>
+                <div class="stat-label">Average Rating</div>
+                <div class="stat-stars">★★★★☆</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">250+</div>
+                <div class="stat-label">Total Reviews</div>
+                <div class="stat-percentage">98% Positive</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">1250+</div>
+                <div class="stat-label">Happy Customers</div>
+                <div class="stat-percentage">Loyal Members</div>
+            </div>
+        </div>
+
+        <button class="btn-primary btn-review" onclick="showReviewModal()">Write a Review</button>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="https://i.pravatar.cc/60?img=1" alt="Reviewer">
+                    <div>
+                        <h4>Rohit Verma</h4>
+                        <div class="review-rating">★★★★★</div>
+                    </div>
+                </div>
+                <p>"Best haircut I've ever had! The barbers are professionals and the service is top-notch. Highly recommended!"</p>
+                <small>Verified Customer • 2 days ago</small>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="https://i.pravatar.cc/60?img=2" alt="Reviewer">
+                    <div>
+                        <h4>Amit Kumar</h4>
+                        <div class="review-rating">★★★★★</div>
+                    </div>
+                </div>
+                <p>"The beard trim and styling was amazing. Will definitely come back. The online booking system is very convenient."</p>
+                <small>Verified Customer • 5 days ago</small>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="https://i.pravatar.cc/60?img=3" alt="Reviewer">
+                    <div>
+                        <h4>Priya Singh</h4>
+                        <div class="review-rating">★★★★★</div>
+                    </div>
+                </div>
+                <p>"Great experience! The barbers are skilled and friendly. The shop is clean and well-maintained. Worth every rupee!"</p>
+                <small>Verified Customer • 1 week ago</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <h2>Premium Grooming Products</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1529148482759-b8e1a8b41e87?w=300&h=300&fit=crop')"></div>
+                <h3>Beard Oil</h3>
+                <p>Nourishing oil for beard growth & shine</p>
+                <div class="product-price">₹499</div>
+                <div class="product-rating">★★★★★ (89 reviews)</div>
+                <button class="btn-add-cart" onclick="addToCart('Beard Oil', 499)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=300&h=300&fit=crop')"></div>
+                <h3>Hair Wax</h3>
+                <p>Premium styling wax with strong hold</p>
+                <div class="product-price">₹399</div>
+                <div class="product-rating">★★★★★ (76 reviews)</div>
+                <button class="btn-add-cart" onclick="addToCart('Hair Wax', 399)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=300&h=300&fit=crop')"></div>
+                <h3>Styling Gel</h3>
+                <p>Lightweight gel for flexible styling</p>
+                <div class="product-price">₹299</div>
+                <div class="product-rating">★★★★☆ (54 reviews)</div>
+                <button class="btn-add-cart" onclick="addToCart('Styling Gel', 299)">Add to Cart</button>
+            </div>
+
+            <div class="product-card featured">
+                <div class="product-badge">Bundle</div>
+                <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=300&h=300&fit=crop')"></div>
+                <h3>Grooming Kit</h3>
+                <p>Complete grooming kit with 5 products</p>
+                <div class="product-price">₹1499 <span>₹1899</span></div>
+                <div class="product-rating">★★★★★ (156 reviews)</div>
+                <button class="btn-add-cart" onclick="addToCart('Grooming Kit', 1499)">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loyalty Section -->
+    <section class="loyalty">
+        <div class="loyalty-content">
+            <h2>Earn Rewards & Get Exclusive Benefits</h2>
+            <div class="loyalty-benefits">
+                <div class="benefit">
+                    <div class="benefit-icon">🎁</div>
+                    <h3>Loyalty Points</h3>
+                    <p>Earn 10 points per booking. Redeem for discounts!</p>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon">👥</div>
+                    <h3>Refer & Earn</h3>
+                    <p>Get ₹500 credit for each friend you refer</p>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon">🎂</div>
+                    <h3>Birthday Bonus</h3>
+                    <p>50% off on all services in your birthday month</p>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon">⭐</div>
+                    <h3>VIP Access</h3>
+                    <p>Priority booking & exclusive member events</p>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="showLoginModal()">Join Our Loyalty Program</button>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2>Visit Us Today</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <div class="contact-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Address</h3>
+                    <p><a href="https://www.google.com/maps/search/?api=1&query=Shop+No.+6+Underground+Ram+Tower+Hospital+Degana+Nagaur+341503" target="_blank" style="color:inherit;text-decoration:underline;">Shop No. 6, Underground Ram Tower Hospital</a></p>
+                    <p>Chauraha, Degana, Nagaur – 341503</p>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-phone"></i>
+                    <h3>Phone</h3>
+                    <p>📞 92610 24220</p>
+                    <p>🕒 Mon-Sun: 9:00 AM - 10:00 PM</p>
+                </div>
+                <div class="contact-card">
+                    <i class="fab fa-whatsapp"></i>
+                    <h3>WhatsApp</h3>
+                    <p>92610 24220</p>
+                    <p>Quick booking & support</p>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email</h3>
+                    <p>contact@beardo.in</p>
+                    <p>support@beardo.in</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Beardo</h3>
+                <p>Shop No. 6, Underground Ram Tower Hospital, Chauraha, Degana, Nagaur – 341503, Rajasthan</p>
+                <p>📞 92610 24220</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#barbers">Our Barbers</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Services</h4>
+                <ul>
+                    <li><a href="#services">Hair Cutting</a></li>
+                    <li><a href="#services">Beard Services</a></li>
+                    <li><a href="#services">Grooming</a></li>
+                    <li><a href="#services">Products</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Beardo. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login / Signup</h2>
+            <form>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close" onclick="closeBookingModal()">&times;</span>
+            <h2>Book Your Appointment</h2>
+            <form id="bookingForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingName">Name</label>
+                        <input type="text" id="bookingName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingPhone">Phone Number</label>
+                        <input type="tel" id="bookingPhone" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingService">Select Service</label>
+                        <select id="bookingService" required>
+                            <option value="">-- Choose Service --</option>
+                            <option value="classic">Classic Haircut - ₹500</option>
+                            <option value="fade">Fade Cut - ₹600</option>
+                            <option value="undercut">Undercut - ₹650</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingDate">Select Date</label>
+                        <input type="date" id="bookingDate" readonly required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingTime">Select Time</label>
+                        <select id="bookingTime" required>
+                            <option value="">-- Choose Time --</option>
+                            <option value="09:00">09:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">01:00 PM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="15:00">03:00 PM</option>
+                            <option value="16:00">04:00 PM</option>
+                            <option value="17:00">05:00 PM</option>
+                            <option value="18:00">06:00 PM</option>
+                            <option value="19:00">07:00 PM</option>
+                            <option value="20:00">08:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary btn-large">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Registration Queue List -->
+    <section id="registrationQueue" class="registration-queue">
+        <h2>Registered Clients Queue</h2>
+        <p>This section displays all clients who have registered for an appointment. Bookings are accepted until 8&nbsp;PM and the shop closes at 9&nbsp;PM; entries remain visible throughout the day and are cleared automatically after closing.</p>
+        <div id="queueList" class="queue-list"></div>
+    </section>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeReviewModal()">&times;</span>
+            <h2>Leave a Review</h2>
+            <form id="reviewForm">
+                <div class="form-group">
+                    <label for="reviewName">Name</label>
+                    <input type="text" id="reviewName" required>
+                </div>
+                <div class="form-group">
+                    <label for="reviewRating">Rating</label>
+                    <select id="reviewRating" required>
+                        <option value="5">★★★★★</option>
+                        <option value="4">★★★★☆</option>
+                        <option value="3">★★★☆☆</option>
+                        <option value="2">★★☆☆☆</option>
+                        <option value="1">★☆☆☆☆</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reviewComment">Comment</label>
+                    <textarea id="reviewComment" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Submit Review</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
