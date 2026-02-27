@@ -1,186 +1,114 @@
-2.0.1 / 2025-11-20
+1.0.0 / 2024-08-31
 ==================
 
-  * deps: use tilde notation for dependencies
-  * deps: update statuses to 2.0.2
+  * Drop support for node <18
+  * Added an option preferred encodings array #59
 
-2.0.0 / 2021-12-17
+0.6.3 / 2022-01-22
 ==================
 
-  * Drop support for Node.js 0.6
-  * Remove `I'mateapot` export; use `ImATeapot` instead
-  * Remove support for status being non-first argument
-  * Rename `UnorderedCollection` constructor to `TooEarly`
-  * deps: depd@2.0.0
-    - Replace internal `eval` usage with `Function` constructor
-    - Use instance methods on `process` to check for listeners
-  * deps: statuses@2.0.1
-    - Fix messaging casing of `418 I'm a Teapot`
-    - Remove code 306
-    - Rename `425 Unordered Collection` to standard `425 Too Early`
+  * Revert "Lazy-load modules from main entry point"
 
-2021-11-14 / 1.8.1
+0.6.2 / 2019-04-29
 ==================
 
-  * deps: toidentifier@1.0.1
+  * Fix sorting charset, encoding, and language with extra parameters
 
-2020-06-29 / 1.8.0
+0.6.1 / 2016-05-02
 ==================
 
-  * Add `isHttpError` export to determine if value is an HTTP error
-  * deps: setprototypeof@1.2.0
+  * perf: improve `Accept` parsing speed
+  * perf: improve `Accept-Charset` parsing speed
+  * perf: improve `Accept-Encoding` parsing speed
+  * perf: improve `Accept-Language` parsing speed
 
-2019-06-24 / 1.7.3
+0.6.0 / 2015-09-29
 ==================
 
-  * deps: inherits@2.0.4
-
-2019-02-18 / 1.7.2
-==================
-
-  * deps: setprototypeof@1.1.1
-
-2018-09-08 / 1.7.1
-==================
-
-  * Fix error creating objects in some environments
-
-2018-07-30 / 1.7.0
-==================
-
-  * Set constructor name when possible
-  * Use `toidentifier` module to make class names
-  * deps: statuses@'>= 1.5.0 < 2'
-
-2018-03-29 / 1.6.3
-==================
-
-  * deps: depd@~1.1.2
-    - perf: remove argument reassignment
-  * deps: setprototypeof@1.1.0
-  * deps: statuses@'>= 1.4.0 < 2'
-
-2017-08-04 / 1.6.2
-==================
-
-  * deps: depd@1.1.1
-    - Remove unnecessary `Buffer` loading
-
-2017-02-20 / 1.6.1
-==================
-
-  * deps: setprototypeof@1.0.3
-    - Fix shim for old browsers
-
-2017-02-14 / 1.6.0
-==================
-
-  * Accept custom 4xx and 5xx status codes in factory
-  * Add deprecation message to `"I'mateapot"` export
-  * Deprecate passing status code as anything except first argument in factory
-  * Deprecate using non-error status codes
-  * Make `message` property enumerable for `HttpError`s
-
-2016-11-16 / 1.5.1
-==================
-
-  * deps: inherits@2.0.3
-    - Fix issue loading in browser
-  * deps: setprototypeof@1.0.2
-  * deps: statuses@'>= 1.3.1 < 2'
-
-2016-05-18 / 1.5.0
-==================
-
-  * Support new code `421 Misdirected Request`
-  * Use `setprototypeof` module to replace `__proto__` setting
-  * deps: statuses@'>= 1.3.0 < 2'
-    - Add `421 Misdirected Request`
-    - perf: enable strict mode
+  * Fix including type extensions in parameters in `Accept` parsing
+  * Fix parsing `Accept` parameters with quoted equals
+  * Fix parsing `Accept` parameters with quoted semicolons
+  * Lazy-load modules from main entry point
+  * perf: delay type concatenation until needed
   * perf: enable strict mode
+  * perf: hoist regular expressions
+  * perf: remove closures getting spec properties
+  * perf: remove a closure from media type parsing
+  * perf: remove property delete from media type parsing
 
-2016-01-28 / 1.4.0
+0.5.3 / 2015-05-10
 ==================
 
-  * Add `HttpError` export, for `err instanceof createError.HttpError`
-  * deps: inherits@2.0.1
-  * deps: statuses@'>= 1.2.1 < 2'
-    - Fix message for status 451
-    - Remove incorrect nginx status code
+  * Fix media type parameter matching to be case-insensitive
 
-2015-02-02 / 1.3.1
+0.5.2 / 2015-05-06
 ==================
 
-  * Fix regression where status can be overwritten in `createError` `props`
+  * Fix comparing media types with quoted values
+  * Fix splitting media types with quoted commas
 
-2015-02-01 / 1.3.0
+0.5.1 / 2015-02-14
 ==================
 
-  * Construct errors using defined constructors from `createError`
-  * Fix error names that are not identifiers
-    - `createError["I'mateapot"]` is now `createError.ImATeapot`
-  * Set a meaningful `name` property on constructed errors
+  * Fix preference sorting to be stable for long acceptable lists
 
-2014-12-09 / 1.2.8
+0.5.0 / 2014-12-18
 ==================
 
-  * Fix stack trace from exported function
-  * Remove `arguments.callee` usage
+  * Fix list return order when large accepted list
+  * Fix missing identity encoding when q=0 exists
+  * Remove dynamic building of Negotiator class
 
-2014-10-14 / 1.2.7
+0.4.9 / 2014-10-14
 ==================
 
-  * Remove duplicate line
+  * Fix error when media type has invalid parameter
 
-2014-10-02 / 1.2.6
+0.4.8 / 2014-09-28
 ==================
 
-  * Fix `expose` to be `true` for `ClientError` constructor
-
-2014-09-28 / 1.2.5
-==================
-
-  * deps: statuses@1
-
-2014-09-21 / 1.2.4
-==================
-
-  * Fix dependency version to work with old `npm`s
-
-2014-09-21 / 1.2.3
-==================
-
-  * deps: statuses@~1.1.0
-
-2014-09-21 / 1.2.2
-==================
-
-  * Fix publish error
-
-2014-09-21 / 1.2.1
-==================
-
+  * Fix all negotiations to be case-insensitive
+  * Stable sort preferences of same quality according to client order
   * Support Node.js 0.6
-  * Use `inherits` instead of `util`
 
-2014-09-09 / 1.2.0
+0.4.7 / 2014-06-24
 ==================
 
-  * Fix the way inheriting functions
-  * Support `expose` being provided in properties argument
+  * Handle invalid provided languages
+  * Handle invalid provided media types
 
-2014-09-08 / 1.1.0
+0.4.6 / 2014-06-11
 ==================
 
-  * Default status to 500
-  * Support provided `error` to extend
+  *  Order by specificity when quality is the same
 
-2014-09-08 / 1.0.1
+0.4.5 / 2014-05-29
 ==================
 
-  * Fix accepting string message
+  * Fix regression in empty header handling
 
-2014-09-08 / 1.0.0
+0.4.4 / 2014-05-29
 ==================
 
-  * Initial release
+  * Fix behaviors when headers are not present
+
+0.4.3 / 2014-04-16
+==================
+
+  * Handle slashes on media params correctly
+
+0.4.2 / 2014-02-28
+==================
+
+  * Fix media type sorting
+  * Handle media types params strictly
+
+0.4.1 / 2014-01-16
+==================
+
+  * Use most specific matches
+
+0.4.0 / 2014-01-09
+==================
+
+  * Remove preferred prefix from methods
