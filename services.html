@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Services</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div class="admin-nav">
+    <div class="logo">Admin Panel</div>
+    <div>
+      <a href="/admin/dashboard">Home</a>
+      <a href="/admin/update-queue">Manage Queue</a>
+      <a href="/admin/notifications">Notifications</a>
+      <a href="/admin/sales">Sales</a>
+      <a href="/admin/services">Services</a>
+      <a href="/admin/barbers">Barbers</a>
+      <a href="/admin/gallery">Gallery</a>
+      <a href="/admin/logout">Log out</a>
+    </div>
+  </div>
+  <main class="admin-wrapper">
+    <h1>Services</h1>
+    <form id="serviceForm" class="admin-form">
+      <label>Name<br><input type="text" id="serviceName" required></label>
+      <label>Description<br><input type="text" id="serviceDesc"></label>
+      <label>Price (₹)<br><input type="number" id="servicePrice" step="0.01"></label>
+      <label>Duration<br><input type="text" id="serviceDuration"></label>
+      <label>Category<br>
+        <select id="serviceCategory">
+          <option value="hair">Hair</option>
+          <option value="beard">Beard</option>
+          <option value="grooming">Grooming</option>
+          <option value="packages">Packages</option>
+        </select>
+      </label>
+      <label>Icon / Emoji<br><input type="text" id="serviceIcon"></label>
+      <label>Image URL<br><input type="url" id="serviceImage"></label>
+      <button type="submit" class="btn-book">Add Service</button>
+    </form>
+    <div id="servicesList" class="mt-2">
+      <p>Loading...</p>
+    </div>
+  </main>
+  <script>
+    async function loadServicesList() {
+      try {
+        const res = await fetch('/admin/api/services');
+        const data = await res.json();
+        const container = document.getElementById('servicesList');
+        if (!data.services || data.services.length === 0) {
+          container.innerHTML = '<p>No services defined.</p>';
+          return;
+        }
+        let html = '<table class="queue-table"><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Image</th><th>Action</th></tr></thead><tbody>';
+        data.services.forEach(s => {
+          html += `<tr><td>${s.name}</td><td>${s.category}</td><td>₹${s.price||0}</td><td><img src="${s.image||''}" style="height:40px"></td><td><button class="btn-book btn-small" onclick="removeService('${s.id}')">Remove</button></td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (e) {}
+    }
+    async function removeService(id) {
+      await fetch('/admin/api/services/remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+      loadServicesList();
+    }
+    document.getElementById('serviceForm').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const entry = {
+        name: document.getElementById('serviceName').value,
+        description: document.getElementById('serviceDesc').value,
+        price: parseFloat(document.getElementById('servicePrice').value)||0,
+        duration: document.getElementById('serviceDuration').value,
+        category: document.getElementById('serviceCategory').value,
+        icon: document.getElementById('serviceIcon').value,
+        image: document.getElementById('serviceImage').value,
+      };
+      await fetch('/admin/api/services',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(entry)});
+      loadServicesList();
+      e.target.reset();
+    });
+    loadServicesList();
+  </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Management</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div class="admin-nav">
+    <div class="logo">Admin Panel</div>
+    <div>
+      <a href="/admin/dashboard">Home</a>
+      <a href="/admin/update-queue">Manage Queue</a>
+      <a href="/admin/notifications">Notifications</a>
+      <a href="/admin/sales">Sales</a>
+      <a href="/admin/logout">Log out</a>
+    </div>
+  </div>
+  <main class="admin-wrapper">
+    <h1>Sales Records</h1>
+
+    <!-- add sale entry form -->
+    <form id="salesForm" class="admin-form">
+      <label>Description
+        <input type="text" id="saleDesc" required>
+      </label>
+      <label>Amount (₹)
+        <input type="number" id="saleAmt" step="0.01" required>
+      </label>
+      <button type="submit" class="btn-book">Add Sale</button>
+    </form>
+
+    <!-- filtering & export controls -->
+    <form id="filterForm" class="admin-form" style="margin-top:1rem;">
+      <label>From <input type="date" id="filterFrom"></label>
+      <label>To <input type="date" id="filterTo"></label>
+      <button type="button" class="btn-book" onclick="applyFilter()">Apply Filter</button>
+      <button type="button" class="btn-book" onclick="exportCSV()">Export CSV</button>
+    </form>
+
+    <div class="mt-1">
+      Total amount: ₹<strong id="salesTotal">0</strong>
+    </div>
+
+    <div id="salesList" class="mt-2">
+      <p>Loading sales...</p>
+    </div>
+  </main>
+  <script>
+    let allSales = [];
+
+    async function loadSales() {
+      try {
+        const res = await fetch('/admin/api/sales');
+        const data = await res.json();
+        allSales = Array.isArray(data.sales) ? data.sales : [];
+        renderSales();
+      } catch (err) {
+        console.error('failed to load sales', err);
+      }
+    }
+
+    function renderSales() {
+      const container = document.getElementById('salesList');
+      const from = document.getElementById('filterFrom').value;
+      const to = document.getElementById('filterTo').value;
+      let filtered = allSales.slice();
+      if (from) {
+        const fromDate = new Date(from);
+        filtered = filtered.filter(s => new Date(s.timestamp) >= fromDate);
+      }
+      if (to) {
+        const toDate = new Date(to + 'T23:59:59');
+        filtered = filtered.filter(s => new Date(s.timestamp) <= toDate);
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p>No sales recorded.</p>';
+      } else {
+        let html = '<table class="queue-table"><thead><tr><th>Description</th><th>Amount</th><th>Time</th><th>Action</th></tr></thead><tbody>';
+        filtered.forEach(s => {
+          html += `<tr><td>${s.description}</td><td>₹${s.amount}</td><td>${new Date(s.timestamp).toLocaleString()}</td><td><button class="btn-book btn-small" onclick="removeSale('${s.id}')">Remove</button></td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      }
+
+      const total = filtered.reduce((sum, s) => sum + (Number(s.amount) || 0), 0);
+      document.getElementById('salesTotal').textContent = total;
+    }
+
+    async function removeSale(id) {
+      if (!confirm('Delete this sale record?')) return;
+      try {
+        await fetch('/admin/api/sales/remove', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        loadSales();
+      } catch (e) { console.error(e); }
+    }
+
+    function applyFilter() {
+      renderSales();
+    }
+
+    function exportCSV() {
+      const from = document.getElementById('filterFrom').value;
+      const to = document.getElementById('filterTo').value;
+      let filtered = allSales.slice();
+      if (from) {
+        const fromDate = new Date(from);
+        filtered = filtered.filter(s => new Date(s.timestamp) >= fromDate);
+      }
+      if (to) {
+        const toDate = new Date(to + 'T23:59:59');
+        filtered = filtered.filter(s => new Date(s.timestamp) <= toDate);
+      }
+      const csv = ['Description,Amount,Time'];
+      filtered.forEach(s => {
+        csv.push(`"${s.description.replace(/"/g,'""')}",${s.amount},"${new Date(s.timestamp).toLocaleString()}"`);
+      });
+      const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sales.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('salesForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const desc = document.getElementById('saleDesc').value;
+      const amt = parseFloat(document.getElementById('saleAmt').value);
+      try {
+        await fetch('/admin/api/sales', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ description: desc, amount: amt })
+        });
+        document.getElementById('saleDesc').value = '';
+        document.getElementById('saleAmt').value = '';
+        loadSales();
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    loadSales();
+  </script>
+</body>
+</html>

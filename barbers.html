@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Barbers</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div class="admin-nav">
+    <div class="logo">Admin Panel</div>
+    <div>
+      <a href="/admin/dashboard">Home</a>
+      <a href="/admin/update-queue">Manage Queue</a>
+      <a href="/admin/notifications">Notifications</a>
+      <a href="/admin/sales">Sales</a>
+      <a href="/admin/services">Services</a>
+      <a href="/admin/barbers">Barbers</a>
+      <a href="/admin/gallery">Gallery</a>
+      <a href="/admin/logout">Log out</a>
+    </div>
+  </div>
+  <main class="admin-wrapper">
+    <h1>Barbers</h1>
+    <form id="barberForm" class="admin-form">
+      <label>Name<br><input type="text" id="barberName" required></label>
+      <label>Specialty<br><input type="text" id="barberSpec"></label>
+      <label>Experience<br><input type="text" id="barberExp"></label>
+      <label>Stars<br><input type="text" id="barberStars"></label>
+      <label>Rating Details<br><input type="text" id="barberRating"></label>
+      <label>Image URL<br><input type="url" id="barberImage"></label>
+      <button type="submit" class="btn-book">Add Barber</button>
+    </form>
+    <div id="barbersList" class="mt-2">
+      <p>Loading...</p>
+    </div>
+  </main>
+  <script>
+    async function loadBarbersList() {
+      try {
+        const res = await fetch('/admin/api/barbers');
+        const data = await res.json();
+        const container = document.getElementById('barbersList');
+        if (!data.barbers || data.barbers.length === 0) {
+          container.innerHTML = '<p>No barbers added.</p>';
+          return;
+        }
+        let html = '<table class="queue-table"><thead><tr><th>Name</th><th>Specialty</th><th>Experience</th><th>Action</th></tr></thead><tbody>';
+        data.barbers.forEach(b => {
+          html += `<tr><td>${b.name}</td><td>${b.specialty}</td><td>${b.experience}</td><td><button class="btn-book btn-small" onclick="removeBarber('${b.id}')">Remove</button></td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (e) {}
+    }
+    async function removeBarber(id) {
+      await fetch('/admin/api/barbers/remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+      loadBarbersList();
+    }
+    document.getElementById('barberForm').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const entry = {
+        name: document.getElementById('barberName').value,
+        specialty: document.getElementById('barberSpec').value,
+        experience: document.getElementById('barberExp').value,
+        stars: document.getElementById('barberStars').value,
+        ratingDetails: document.getElementById('barberRating').value,
+        image: document.getElementById('barberImage').value,
+      };
+      await fetch('/admin/api/barbers',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(entry)});
+      loadBarbersList();
+      e.target.reset();
+    });
+    loadBarbersList();
+  </script>
+</body>
+</html>

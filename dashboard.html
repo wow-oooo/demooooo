@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+
+</head>
+<body>
+  <div class="admin-nav">
+    <div class="logo">Admin Panel</div>
+    <div>
+      <a href="/admin/dashboard">Home</a>
+      <a href="/admin/update-queue">Manage Queue</a>
+      <a href="/admin/bookings">Bookings</a>
+      <a href="/admin/customers">Customers</a>
+      <a href="/admin/sales">Sales</a>
+      <a href="/admin/services">Services</a>
+      <a href="/admin/barbers">Barbers</a>
+      <a href="/admin/gallery">Gallery</a>
+      <a href="/admin/coupons">Coupons</a>
+      <a href="/admin/site">Site</a>
+      <a href="/admin/logout">Log out</a>
+    </div>
+  </div>
+  <main class="admin-wrapper">
+    <h1>Dashboard</h1>
+    <p>Welcome, administrator!</p>
+  <div class="dashboard-card">
+    <p>Current queue count: <strong id="queue-count">...</strong></p>
+    <p>Last updated: <span id="updated-at">...</span></p>
+    <p><a href="/admin/bookings">View/Manage bookings</a></p>
+  </div>
+  <div class="dashboard-card">
+    <p>Notifications generated: <strong id="notif-count">0</strong></p>
+    <p><a href="/admin/notifications">View all notifications</a></p>
+  </div>
+  <div class="dashboard-card">
+    <p>Total sales amount: ₹<strong id="sales-total">0</strong></p>
+    <p><a href="/admin/sales">View sales records</a></p>
+  </div>
+  <script>
+    // fetch the latest queue count when the dashboard loads
+    async function refresh() {
+      try {
+        const res = await fetch('/admin/api/queue');
+        const data = await res.json();
+        document.getElementById('queue-count').textContent = data.count;
+        if (data.updatedAt) {
+          document.getElementById('updated-at').textContent = new Date(data.updatedAt).toLocaleString();
+        }
+      } catch (e) {
+        console.error('failed to load queue count', e);
+        document.getElementById('queue-count').textContent = 'n/a';
+        document.getElementById('updated-at').textContent = 'n/a';
+      }
+      // load notification count
+      try {
+        const r3 = await fetch('/admin/api/notifications');
+        const nobj = await r3.json();
+        if (Array.isArray(nobj.notifications)) {
+          document.getElementById('notif-count').textContent = nobj.notifications.length;
+        }
+      } catch (err) {
+        console.error('failed to load notifications', err);
+      }
+      // then load sales total
+      try {
+        const res2 = await fetch('/admin/api/sales');
+        const obj = await res2.json();
+        if (Array.isArray(obj.sales)) {
+          const total = obj.sales.reduce((sum, s) => sum + (Number(s.amount)||0), 0);
+          document.getElementById('sales-total').textContent = total;
+        }
+      } catch (err) {
+        console.error('failed to load sales', err);
+      }
+    }
+    refresh();
+  </script>
+  </main>
+</body>
+</html>

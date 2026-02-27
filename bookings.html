@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Bookings</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div class="admin-nav">
+    <div class="logo">Admin Panel</div>
+    <div>
+      <a href="/admin/dashboard">Home</a>
+      <a href="/admin/bookings">Bookings</a>
+      <a href="/admin/customers">Customers</a>
+      <a href="/admin/notifications">Notifications</a>
+      <a href="/admin/update-queue">Manage Queue</a>
+      <a href="/admin/sales">Sales</a>
+      <a href="/admin/services">Services</a>
+      <a href="/admin/barbers">Barbers</a>
+      <a href="/admin/gallery">Gallery</a>
+      <a href="/admin/coupons">Coupons</a>
+      <a href="/admin/site">Site</a>
+      <a href="/admin/logout">Log out</a>
+    </div>
+  </div>
+  <main class="admin-wrapper">
+    <h1>Bookings</h1>
+    <div id="bookingList">Loading...</div>
+  </main>
+  <script>
+    async function loadBookings() {
+      try {
+        const res = await fetch('/admin/api/queue');
+        const data = await res.json();
+        const container = document.getElementById('bookingList');
+        if (!data.entries || data.entries.length === 0) {
+          container.innerHTML = '<p>No bookings.</p>';
+          return;
+        }
+        let html = '<table class="queue-table"><thead><tr><th>Name</th><th>Phone</th><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr></thead><tbody>';
+        data.entries.forEach(b => {
+          html += `<tr><td>${b.name}</td><td>${b.phone||''}</td><td>${b.service||''}</td><td>${b.date||''}</td><td>${b.time||''}</td><td>${b.status||'pending'}</td><td>`;
+          if (b.status === 'pending') {
+            html += `<button class="btn-book btn-small" onclick="updateBooking('${b.id}','accepted')">Accept</button> <button class="btn-book btn-small" onclick="updateBooking('${b.id}','rejected')">Reject</button>`;
+          }
+          html += ` <button class="btn-book btn-small" onclick="updateBooking('${b.id}','cancelled')">Cancel</button>`;
+          html += ` <button class="btn-book btn-small" onclick="rescheduleBooking('${b.id}')">Reschedule</button>`;
+          html += `</td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    async function updateBooking(id,status) {
+      await fetch('/admin/api/booking/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status})});
+      loadBookings();
+    }
+    async function rescheduleBooking(id) {
+      const newDate = prompt('Enter new date (YYYY-MM-DD):');
+      const newTime = prompt('Enter new time (HH:MM):');
+      if (newDate || newTime) {
+        await fetch('/admin/api/booking/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,date:newDate,time:newTime})});
+        loadBookings();
+      }
+    }
+    loadBookings();
+  </script>
+</body>
+</html>

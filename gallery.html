@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Gallery</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div class="admin-nav">
+    <div class="logo">Admin Panel</div>
+    <div>
+      <a href="/admin/dashboard">Home</a>
+      <a href="/admin/update-queue">Manage Queue</a>
+      <a href="/admin/notifications">Notifications</a>
+      <a href="/admin/sales">Sales</a>
+      <a href="/admin/services">Services</a>
+      <a href="/admin/barbers">Barbers</a>
+      <a href="/admin/gallery">Gallery</a>
+      <a href="/admin/logout">Log out</a>
+    </div>
+  </div>
+  <main class="admin-wrapper">
+    <h1>Gallery</h1>
+    <form id="galleryForm" class="admin-form">
+      <label>Image URL<br><input type="url" id="galleryImage" required></label>
+      <label>Caption<br><input type="text" id="galleryCaption"></label>
+      <label>Description<br><input type="text" id="galleryDesc"></label>
+      <label>Category<br>
+        <select id="galleryCat">
+          <option value="haircut">Haircut</option>
+          <option value="beard">Beard</option>
+          <option value="beforeafter">Before/After</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <button type="submit" class="btn-book">Add Image</button>
+    </form>
+    <div id="galleryList" class="mt-2">
+      <p>Loading...</p>
+    </div>
+  </main>
+  <script>
+    async function loadGalleryAdmin() {
+      try {
+        const res = await fetch('/admin/api/gallery');
+        const data = await res.json();
+        const container = document.getElementById('galleryList');
+        if (!data.gallery || data.gallery.length === 0) {
+          container.innerHTML = '<p>No gallery items.</p>';
+          return;
+        }
+        let html = '<table class="queue-table"><thead><tr><th>Caption</th><th>Category</th><th>Action</th></tr></thead><tbody>';
+        data.gallery.forEach(g => {
+          html += `<tr><td>${g.caption}</td><td>${g.category}</td><td><button class="btn-book btn-small" onclick="removeGallery('${g.id}')">Remove</button></td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (e) {}
+    }
+    async function removeGallery(id) {
+      await fetch('/admin/api/gallery/remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+      loadGalleryAdmin();
+    }
+    document.getElementById('galleryForm').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const entry = {
+        image: document.getElementById('galleryImage').value,
+        caption: document.getElementById('galleryCaption').value,
+        description: document.getElementById('galleryDesc').value,
+        category: document.getElementById('galleryCat').value,
+      };
+      await fetch('/admin/api/gallery',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(entry)});
+      loadGalleryAdmin();
+      e.target.reset();
+    });
+    loadGalleryAdmin();
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Queue</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+
+</head>
+<body>
+  <div class="admin-nav">
+    <div class="logo">Admin Panel</div>
+    <div>
+      <a href="/admin/dashboard">Home</a>
+      <a href="/admin/update-queue">Update Queue</a>
+      <a href="/admin/notifications">Notifications</a>
+      <a href="/admin/logout">Log out</a>
+    </div>
+  </div>
+  <main class="admin-wrapper">
+    <h1>Manage Queue</h1>
+    <p id="updated-info">Last updated: <span id="updated-at">...</span></p>
+    <div id="queue-management">
+      <p><em>Loading queue...</em></p>
+    </div>
+    <!-- optional manual count form -->
+    <details class="mt-2">
+      <summary>Override queue count</summary>
+      <form class="admin-form" action="/admin/queue" method="post">
+        <label>Number in queue
+          <input id="count-input" type="number" name="count" min="0" required>
+        </label>
+        <button type="submit" class="btn-book">Save</button>
+      </form>
+    </details>
+  <script>
+    async function renderQueue() {
+      try {
+        const res = await fetch('/admin/api/queue');
+        const data = await res.json();
+        document.getElementById('updated-at').textContent = data.updatedAt ? new Date(data.updatedAt).toLocaleString() : 'n/a';
+        // keep manual count input in sync
+        const countInput = document.getElementById('count-input');
+        if (countInput && typeof data.count === 'number') {
+          countInput.value = data.count;
+        }
+        const container = document.getElementById('queue-management');
+        if (!data.entries || data.entries.length === 0) {
+          container.innerHTML = '<p>No one in queue.</p>';
+          return;
+        }
+        let html = '<table class="queue-table"><thead><tr><th>Name</th><th>Date</th><th>Time</th><th>Service</th><th>Phone</th><th>Action</th></tr></thead><tbody>';
+        data.entries.forEach(e => {
+          html += `<tr><td>${e.name}</td><td>${e.date||''}</td><td>${e.time||''}</td><td>${e.service||''}</td><td>${e.phone||''}</td><td><button class="btn-book btn-small" onclick="removeFromQueue('${e.id}')">Remove</button></td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (err) {
+        console.error('failed to load queue', err);
+      }
+    }
+    async function removeFromQueue(id) {
+      if (!confirm('Remove this entry from queue?')) return;
+      try {
+        const res = await fetch('/admin/queue/remove', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        await res.json();
+        renderQueue();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // populate count input as well
+    async function init() {
+      try {
+        const res = await fetch('/admin/api/queue');
+        const data = await res.json();
+        document.getElementById('count-input').value = data.count;
+      } catch (e) {
+        console.error(e);
+      }
+      renderQueue();
+    }
+    init();
+  </script>
+  <p class="mt-1"><a href="/admin/dashboard">Back to dashboard</a></p>
+  </main>
+</body>
+</html>

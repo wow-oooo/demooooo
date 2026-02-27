@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Site Content</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div class="admin-nav">
+    <div class="logo">Admin Panel</div>
+    <div>
+      <a href="/admin/dashboard">Home</a>
+      <a href="/admin/bookings">Bookings</a>
+      <a href="/admin/customers">Customers</a>
+      <a href="/admin/update-queue">Manage Queue</a>
+      <a href="/admin/notifications">Notifications</a>
+      <a href="/admin/sales">Sales</a>
+      <a href="/admin/services">Services</a>
+      <a href="/admin/barbers">Barbers</a>
+      <a href="/admin/gallery">Gallery</a>
+      <a href="/admin/coupons">Coupons</a>
+      <a href="/admin/site">Site</a>
+      <a href="/admin/logout">Log out</a>
+    </div>
+  </div>
+  <main class="admin-wrapper">
+    <h1>Edit Website Content</h1>
+    <form id="siteForm" class="admin-form">
+      <label>Pricing Info<br><textarea id="sitePrice"></textarea></label>
+      <label>Timing / Hours<br><textarea id="siteTiming"></textarea></label>
+      <label>Contact Details<br><textarea id="siteContact"></textarea></label>
+      <button type="submit" class="btn-book">Save</button>
+    </form>
+  </main>
+  <script>
+    async function loadSite() {
+      const res = await fetch('/admin/api/site');
+      const s = await res.json();
+      document.getElementById('sitePrice').value = s.price || '';
+      document.getElementById('siteTiming').value = s.timing || '';
+      document.getElementById('siteContact').value = s.contact || '';
+    }
+    document.getElementById('siteForm').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const payload = {
+        price: document.getElementById('sitePrice').value,
+        timing: document.getElementById('siteTiming').value,
+        contact: document.getElementById('siteContact').value
+      };
+      await fetch('/admin/api/site',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      alert('Site content saved');
+    });
+    loadSite();
+  </script>
+</body>
+</html>
