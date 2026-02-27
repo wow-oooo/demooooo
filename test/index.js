@@ -2,67 +2,113 @@
 
 var test = require('tape');
 
-var getProto = require('../');
+var getSideChannelWeakMap = require('../');
 
-test('getProto', function (t) {
-	t.equal(typeof getProto, 'function', 'is a function');
+test('getSideChannelMap', { skip: typeof WeakMap !== 'function' && typeof Map !== 'function' }, function (t) {
+	var getSideChannel = getSideChannelWeakMap || function () {
+		throw new EvalError('should never happen');
+	};
 
-	t.test('can get', { skip: !getProto }, function (st) {
-		if (getProto) { // TS doesn't understand tape's skip
-			var proto = { b: 2 };
-			st.equal(getProto(proto), Object.prototype, 'proto: returns the [[Prototype]]');
+	t.test('export', function (st) {
+		st.equal(typeof getSideChannel, 'function', 'is a function');
 
-			st.test('nullish value', function (s2t) {
-			// @ts-expect-error
-				s2t['throws'](function () { return getProto(undefined); }, TypeError, 'undefined is not an object');
-				// @ts-expect-error
-				s2t['throws'](function () { return getProto(null); }, TypeError, 'null is not an object');
-				s2t.end();
-			});
+		st.equal(getSideChannel.length, 0, 'takes no arguments');
 
-			// @ts-expect-error
-			st['throws'](function () { getProto(true); }, 'throws for true');
-			// @ts-expect-error
-			st['throws'](function () { getProto(false); }, 'throws for false');
-			// @ts-expect-error
-			st['throws'](function () { getProto(42); }, 'throws for 42');
-			// @ts-expect-error
-			st['throws'](function () { getProto(NaN); }, 'throws for NaN');
-			// @ts-expect-error
-			st['throws'](function () { getProto(0); }, 'throws for +0');
-			// @ts-expect-error
-			st['throws'](function () { getProto(-0); }, 'throws for -0');
-			// @ts-expect-error
-			st['throws'](function () { getProto(Infinity); }, 'throws for ∞');
-			// @ts-expect-error
-			st['throws'](function () { getProto(-Infinity); }, 'throws for -∞');
-			// @ts-expect-error
-			st['throws'](function () { getProto(''); }, 'throws for empty string');
-			// @ts-expect-error
-			st['throws'](function () { getProto('foo'); }, 'throws for non-empty string');
-			st.equal(getProto(/a/g), RegExp.prototype);
-			st.equal(getProto(new Date()), Date.prototype);
-			st.equal(getProto(function () {}), Function.prototype);
-			st.equal(getProto([]), Array.prototype);
-			st.equal(getProto({}), Object.prototype);
+		var channel = getSideChannel();
+		st.ok(channel, 'is truthy');
+		st.equal(typeof channel, 'object', 'is an object');
+		st.end();
+	});
 
-			var nullObject = { __proto__: null };
-			if ('toString' in nullObject) {
-				st.comment('no null objects in this engine');
-				st.equal(getProto(nullObject), Object.prototype, '"null" object has Object.prototype as [[Prototype]]');
-			} else {
-				st.equal(getProto(nullObject), null, 'null object has null [[Prototype]]');
-			}
-		}
+	t.test('assert', function (st) {
+		var channel = getSideChannel();
+		st['throws'](
+			function () { channel.assert({}); },
+			TypeError,
+			'nonexistent value throws'
+		);
+
+		var o = {};
+		channel.set(o, 'data');
+		st.doesNotThrow(function () { channel.assert(o); }, 'existent value noops');
 
 		st.end();
 	});
 
-	t.test('can not get', { skip: !!getProto }, function (st) {
-		st.equal(getProto, null);
+	t.test('has', function (st) {
+		var channel = getSideChannel();
+		/** @type {unknown[]} */ var o = [];
+
+		st.equal(channel.has(o), false, 'nonexistent value yields false');
+
+		channel.set(o, 'foo');
+		st.equal(channel.has(o), true, 'existent value yields true');
+
+		st.equal(channel.has('abc'), false, 'non object value non existent yields false');
+
+		channel.set('abc', 'foo');
+		st.equal(channel.has('abc'), true, 'non object value that exists yields true');
 
 		st.end();
 	});
+
+	t.test('get', function (st) {
+		var channel = getSideChannel();
+		var o = {};
+		st.equal(channel.get(o), undefined, 'nonexistent value yields undefined');
+
+		var data = {};
+		channel.set(o, data);
+		st.equal(channel.get(o), data, '"get" yields data set by "set"');
+
+		st.end();
+	});
+
+	t.test('set', function (st) {
+		var channel = getSideChannel();
+		var o = function () {};
+		st.equal(channel.get(o), undefined, 'value not set');
+
+		channel.set(o, 42);
+		st.equal(channel.get(o), 42, 'value was set');
+
+		channel.set(o, Infinity);
+		st.equal(channel.get(o), Infinity, 'value was set again');
+
+		var o2 = {};
+		channel.set(o2, 17);
+		st.equal(channel.get(o), Infinity, 'o is not modified');
+		st.equal(channel.get(o2), 17, 'o2 is set');
+
+		channel.set(o, 14);
+		st.equal(channel.get(o), 14, 'o is modified');
+		st.equal(channel.get(o2), 17, 'o2 is not modified');
+
+		st.end();
+	});
+
+	t.test('delete', function (st) {
+		var channel = getSideChannel();
+		var o = {};
+		st.equal(channel['delete']({}), false, 'nonexistent value yields false');
+
+		channel.set(o, 42);
+		st.equal(channel.has(o), true, 'value is set');
+
+		st.equal(channel['delete']({}), false, 'nonexistent value still yields false');
+
+		st.equal(channel['delete'](o), true, 'deleted value yields true');
+
+		st.equal(channel.has(o), false, 'value is no longer set');
+
+		st.end();
+	});
+
+	t.end();
+});
+
+test('getSideChannelMap, no WeakMaps and/or Maps', { skip: typeof WeakMap === 'function' || typeof Map === 'function' }, function (t) {
+	t.equal(getSideChannelWeakMap, false, 'is false');
 
 	t.end();
 });

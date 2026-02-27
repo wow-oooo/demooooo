@@ -1,31 +1,36 @@
-# Polyfill for `Object.setPrototypeOf`
+# wrappy
 
-[![NPM Version](https://img.shields.io/npm/v/setprototypeof.svg)](https://npmjs.org/package/setprototypeof)
-[![NPM Downloads](https://img.shields.io/npm/dm/setprototypeof.svg)](https://npmjs.org/package/setprototypeof)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](https://github.com/standard/standard)
+Callback wrapping utility
 
-A simple cross platform implementation to set the prototype of an instianted object.  Supports all modern browsers and at least back to IE8.
-
-## Usage:
-
-```
-$ npm install --save setprototypeof
-```
+## USAGE
 
 ```javascript
-var setPrototypeOf = require('setprototypeof')
+var wrappy = require("wrappy")
 
-var obj = {}
-setPrototypeOf(obj, {
-  foo: function () {
-    return 'bar'
+// var wrapper = wrappy(wrapperFunction)
+
+// make sure a cb is called only once
+// See also: http://npm.im/once for this specific use case
+var once = wrappy(function (cb) {
+  var called = false
+  return function () {
+    if (called) return
+    called = true
+    return cb.apply(this, arguments)
   }
 })
-obj.foo() // bar
-```
 
-TypeScript is also supported:
+function printBoo () {
+  console.log('boo')
+}
+// has some rando property
+printBoo.iAmBooPrinter = true
 
-```typescript
-import setPrototypeOf from 'setprototypeof'
+var onlyPrintOnce = once(printBoo)
+
+onlyPrintOnce() // prints 'boo'
+onlyPrintOnce() // does nothing
+
+// random property is retained!
+assert.equal(onlyPrintOnce.iAmBooPrinter, true)
 ```
