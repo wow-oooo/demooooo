@@ -1,114 +1,228 @@
-1.0.0 / 2024-08-31
+2.2.0 / 2025-03-26
 ==================
 
-  * Drop support for node <18
-  * Added an option preferred encodings array #59
+* Remove `setImmediate` support check
+* Restore `debug` dependency
 
-0.6.3 / 2022-01-22
+2.1.0 / 2025-02-10
 ==================
 
-  * Revert "Lazy-load modules from main entry point"
+* Updated `engines` field to Node@18 or higher
+* Remove `Object.setPrototypeOf` polyfill
+* Use `Array.flat` instead of `array-flatten` package
+* Replace `methods` dependency with standard library
+* deps: parseurl@^1.3.3
+* deps: is-promise@^4.0.0
+* Replace `utils-merge` dependency with `Object.assign`
+* deps: Remove unused dep `after`
 
-0.6.2 / 2019-04-29
+2.0.0 / 2024-09-09
 ==================
 
-  * Fix sorting charset, encoding, and language with extra parameters
+* Drop support for node <18
+* deps: path-to-regexp@^8.0.0
+  - Drop support for partial capture group `router.route('/user(s?)/:user/:op')` but still have optional non-capture `/user{s}/:user/:op`
+  - `:name?` becomes `{:name}`
+  - `:name*` becomes `*name`.
+  - The splat change also changes splat from strings to an array of strings
+  - Optional splats become `{*name}`
+  - `:name+` becomes `*name` and thus equivalent to `*name` so I dropped those tests
+  - Strings as regular expressions are fully removed, need to be converted to native regular expressions
 
-0.6.1 / 2016-05-02
+2.0.0-beta.2 / 2024-03-20
+=========================
+
+This incorporates all changes after 1.3.5 up to 1.3.8.
+
+  * Add support for returned, rejected Promises to `router.param`
+
+2.0.0-beta.1 / 2020-03-29
+=========================
+
+This incorporates all changes after 1.3.3 up to 1.3.5.
+
+  * Internalize private `router.process_params` method
+  * Remove `debug` dependency
+  * deps: array-flatten@3.0.0
+  * deps: parseurl@~1.3.3
+  * deps: path-to-regexp@3.2.0
+    - Add new `?`, `*`, and `+` parameter modifiers.
+    - Matching group expressions are only RegExp syntax.
+      `(*)` is no longer valid and must be written as `(.*)`, for example.
+    - Named matching groups no longer available by position in `req.params`.
+      `/:foo(.*)` only captures as `req.params.foo` and not available as
+      `req.params[0]`.
+    - Regular expressions can only be used in a matching group.
+      `/\\d+` is no longer valid and must be written as `/(\\d+)`.
+    - Matching groups are now literal regular expressions.
+      `:foo` named captures can no longer be included inside a capture group.
+    - Special `*` path segment behavior removed.
+      `/foo/*/bar` will match a literal `*` as the middle segment.
+  * deps: setprototypeof@1.2.0
+
+2.0.0-alpha.1 / 2018-07-27
+==========================
+
+  * Add basic support for returned, rejected Promises
+    - Rejected Promises from middleware functions `next(error)`
+  * Drop support for Node.js below 0.10
+  * deps: debug@3.1.0
+    - Add `DEBUG_HIDE_DATE` environment variable
+    - Change timer to per-namespace instead of global
+    - Change non-TTY date format
+    - Remove `DEBUG_FD` environment variable support
+    - Support 256 namespace colors
+
+1.3.8 / 2023-02-24
 ==================
 
-  * perf: improve `Accept` parsing speed
-  * perf: improve `Accept-Charset` parsing speed
-  * perf: improve `Accept-Encoding` parsing speed
-  * perf: improve `Accept-Language` parsing speed
+  * Fix routing requests without method
 
-0.6.0 / 2015-09-29
+1.3.7 / 2022-04-28
 ==================
 
-  * Fix including type extensions in parameters in `Accept` parsing
-  * Fix parsing `Accept` parameters with quoted equals
-  * Fix parsing `Accept` parameters with quoted semicolons
-  * Lazy-load modules from main entry point
-  * perf: delay type concatenation until needed
+  * Fix hanging on large stack of sync routes
+
+1.3.6 / 2021-11-15
+==================
+
+  * Fix handling very large stacks of sync middleware
+  * deps: safe-buffer@5.2.1
+
+1.3.5 / 2020-03-24
+==================
+
+  * Fix incorrect middleware execution with unanchored `RegExp`s
+  * perf: use plain object for internal method map
+
+1.3.4 / 2020-01-24
+==================
+
+  * deps: array-flatten@3.0.0
+  * deps: parseurl@~1.3.3
+  * deps: setprototypeof@1.2.0
+
+1.3.3 / 2018-07-06
+==================
+
+  * Fix JSDoc for `Router` constructor
+
+1.3.2 / 2017-09-24
+==================
+
+  * deps: debug@2.6.9
+  * deps: parseurl@~1.3.2
+    - perf: reduce overhead for full URLs
+    - perf: unroll the "fast-path" `RegExp`
+  * deps: setprototypeof@1.1.0
+  * deps: utils-merge@1.0.1
+
+1.3.1 / 2017-05-19
+==================
+
+  * deps: debug@2.6.8
+    - Fix `DEBUG_MAX_ARRAY_LENGTH`
+    - deps: ms@2.0.0
+
+1.3.0 / 2017-02-25
+==================
+
+  * Add `next("router")` to exit from router
+  * Fix case where `router.use` skipped requests routes did not
+  * Use `%o` in path debug to tell types apart
+  * deps: setprototypeof@1.0.3
+  * perf: add fast match path for `*` route
+
+1.2.0 / 2017-02-17
+==================
+
+  * Skip routing when `req.url` is not set
+  * deps: debug@2.6.1
+    - Allow colors in workers
+    - Deprecated `DEBUG_FD` environment variable set to `3` or higher
+    - Fix error when running under React Native
+    - Use same color for same namespace
+    - deps: ms@0.7.2
+
+1.1.5 / 2017-01-28
+==================
+
+  * deps: array-flatten@2.1.1
+  * deps: setprototypeof@1.0.2
+    - Fix using fallback even when native method exists
+
+1.1.4 / 2016-01-21
+==================
+
+  * deps: array-flatten@2.0.0
+  * deps: methods@~1.1.2
+    - perf: enable strict mode
+  * deps: parseurl@~1.3.1
+    - perf: enable strict mode
+
+1.1.3 / 2015-08-02
+==================
+
+  * Fix infinite loop condition using `mergeParams: true`
+  * Fix inner numeric indices incorrectly altering parent `req.params`
+  * deps: array-flatten@1.1.1
+    - perf: enable strict mode
+  * deps: path-to-regexp@0.1.7
+    - Fix regression with escaped round brackets and matching groups
+
+1.1.2 / 2015-07-06
+==================
+
+  * Fix hiding platform issues with `decodeURIComponent`
+    - Only `URIError`s are a 400
+  * Fix using `*` before params in routes
+  * Fix using capture groups before params in routes
+  * deps: path-to-regexp@0.1.6
   * perf: enable strict mode
-  * perf: hoist regular expressions
-  * perf: remove closures getting spec properties
-  * perf: remove a closure from media type parsing
-  * perf: remove property delete from media type parsing
+  * perf: remove argument reassignments in routing
+  * perf: skip attempting to decode zero length string
+  * perf: use plain for loops
 
-0.5.3 / 2015-05-10
+1.1.1 / 2015-05-25
 ==================
 
-  * Fix media type parameter matching to be case-insensitive
+  * Fix issue where `next('route')` in `router.param` would incorrectly skip values
+  * deps: array-flatten@1.1.0
+  * deps: debug@~2.2.0
+    - deps: ms@0.7.1
 
-0.5.2 / 2015-05-06
+1.1.0 / 2015-04-22
 ==================
 
-  * Fix comparing media types with quoted values
-  * Fix splitting media types with quoted commas
+  * Use `setprototypeof` instead of `__proto__`
+  * deps: debug@~2.1.3
+    - Fix high intensity foreground color for bold
+    - deps: ms@0.7.0
 
-0.5.1 / 2015-02-14
+1.0.0 / 2015-01-13
 ==================
 
-  * Fix preference sorting to be stable for long acceptable lists
+  * Fix crash from error within `OPTIONS` response handler
+  * deps: array-flatten@1.0.2
+    - Remove redundant code path
 
-0.5.0 / 2014-12-18
-==================
+1.0.0-beta.3 / 2015-01-11
+=========================
 
-  * Fix list return order when large accepted list
-  * Fix missing identity encoding when q=0 exists
-  * Remove dynamic building of Negotiator class
+  * Fix duplicate methods appearing in OPTIONS responses
+  * Fix OPTIONS responses to include the HEAD method properly
+  * Remove support for leading colon in `router.param(name, fn)`
+  * Use `array-flatten` for flattening arrays
+  * deps: debug@~2.1.1
+  * deps: methods@~1.1.1
 
-0.4.9 / 2014-10-14
-==================
+1.0.0-beta.2 / 2014-11-19
+=========================
 
-  * Fix error when media type has invalid parameter
+  * Match routes iteratively to prevent stack overflows
 
-0.4.8 / 2014-09-28
-==================
+1.0.0-beta.1 / 2014-11-16
+=========================
 
-  * Fix all negotiations to be case-insensitive
-  * Stable sort preferences of same quality according to client order
-  * Support Node.js 0.6
-
-0.4.7 / 2014-06-24
-==================
-
-  * Handle invalid provided languages
-  * Handle invalid provided media types
-
-0.4.6 / 2014-06-11
-==================
-
-  *  Order by specificity when quality is the same
-
-0.4.5 / 2014-05-29
-==================
-
-  * Fix regression in empty header handling
-
-0.4.4 / 2014-05-29
-==================
-
-  * Fix behaviors when headers are not present
-
-0.4.3 / 2014-04-16
-==================
-
-  * Handle slashes on media params correctly
-
-0.4.2 / 2014-02-28
-==================
-
-  * Fix media type sorting
-  * Handle media types params strictly
-
-0.4.1 / 2014-01-16
-==================
-
-  * Use most specific matches
-
-0.4.0 / 2014-01-09
-==================
-
-  * Remove preferred prefix from methods
+  * Initial release ported from Express 4.x
+    - Altered to work without Express

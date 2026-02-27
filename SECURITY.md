@@ -1,7 +1,11 @@
-# Security issue reporting & disclosure process
+# Security
 
-If you feel you have found a security issue or concern with Helmet, please reach out to the maintainers.
+Please file a private vulnerability report via GitHub, email [@ljharb](https://github.com/ljharb), or see https://tidelift.com/security if you have a potential security vulnerability to report.
 
-Contact Evan Hahn at <me@evanhahn.com> or Adam Baldwin at <adam@npmjs.com>. Evan Hahn [can also be reached in other ways](https://evanhahn.com/contact).
+## Incident Response Plan
 
-We will try to communicate in a timely manner and address your concerns.
+Please see our [Incident Response Plan](https://github.com/ljharb/.github/blob/main/INCIDENT_RESPONSE_PLAN.md).
+
+## Threat Model
+
+Please see [THREAT_MODEL.md](./THREAT_MODEL.md).
